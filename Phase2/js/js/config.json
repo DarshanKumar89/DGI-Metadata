@@ -1,0 +1,74 @@
+{ "Search": {
+        "Table": [
+          { "$id$":["id"] },
+                "name",
+                "description",
+                "owner",
+                "createTime"
+        ],
+        "DB": [
+          { "$id$":["id"] },
+                "name",
+                "description",
+                "locationUri",
+                "owner"
+        ],
+      "Column": [
+        { "$id$":["id"] },
+                "name",
+                "dataType",
+                "comment",
+                "table"
+            ],
+  "__tempQueryResultStruct21": [
+            "traitDetails",
+            "instanceInfo"
+  ],
+  "__tempQueryResultStruct27": [
+    "traitDetails",
+    "instanceInfo"
+  ],
+  "__tempQueryResultStruct29": [
+    "traitDetails",
+    "instanceInfo"
+  ],
+  "__tempQueryResultStruct33": [
+    "traitDetails",
+    "instanceInfo"
+  ],
+  "StorageDesc": [
+    { "$id$":["id"] },
+    "compressed",
+    "outputFormat",
+    "location",
+    "inputFormat"
+  ],
+  "__tempQueryResultStruct37": [
+    "traitDetails",
+    "instanceInfo"
+  ],
+  "__tempQueryResultStruct49": [
+    "traitDetails",
+    "instanceInfo"
+  ],
+  "__tempQueryResultStruct55": [
+    "traitDetails",
+    "instanceInfo"
+  ],
+  "LoadProcess": [
+    { "$id$":["id"] },
+    "outputTable",
+    "inputTables",
+    "name",
+    "queryText",
+    "startTime",
+    "queryPlan"
+  ],
+  "View": [
+    { "$id$":["id"] },
+    "inputTables",
+    "name"
+  ]
+
+    }
+}
