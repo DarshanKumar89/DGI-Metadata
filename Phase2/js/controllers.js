@@ -369,6 +369,7 @@ DgcControllers.controller("DefinitionController", ['$scope','$http', '$statePara
                 $scope.details=  angular.fromJson(data.results);
                 if(!$scope.isUndefined( $scope.details)) {
                  //   console.log($scope.details['name']);
+                     $scope.datatype1=$scope.details["$typeName$"];
                     $scope.getSchema($scope.details['name']);
                     $scope.getLinegae($scope.details['name']);
                 }
