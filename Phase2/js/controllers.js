@@ -305,7 +305,7 @@ DgcControllers.controller("ListController", ['$scope','$http', '$filter','$state
 );
 
 
-DgcControllers.controller("DefinitionController", ['$scope','$http', '$stateParams', 'sharedProperties', function($scope, $http, $stateParams, sharedProperties)
+DgcControllers.controller("DefinitionController", ['$scope','$http', '$stateParams', 'sharedProperties','$q', function($scope, $http, $stateParams, sharedProperties, $q)
     {
 
 					$scope.guidName="";
@@ -425,7 +425,8 @@ DgcControllers.controller("DefinitionController", ['$scope','$http', '$statePara
 
             $scope.width = 700;
             $scope.height = 500;
-
+			var arr=[];
+            var arrmyalias=[];
             $http.get('/api/metadata/lineage/hive/outputs/'+tableName)
                 .success(function (data) {
                     $scope.iserror1=false;
@@ -467,163 +468,186 @@ DgcControllers.controller("DefinitionController", ['$scope','$http', '$statePara
                         if (!uniquevts[item.Name]) {
                             newarrvts.push(item);
                             uniquevts[item.Name] = item;
-                            getLienageGuidName(item.Name);
-                            //console.log(newarr);
+							
+							  var url="/api/metadata/entities/definition/"+item.Name;
+							   arr.push($http.get(url));
+							
+                            //getLienageGuidName(item.Name);
+                            console.log(item.Name);
                         }
                     });
+					
+					 $q.all(arr).then(function(ret){
+                    console.log("Result guid list length="+ret.length);
+                    for(var i=0;i<ret.length;i++){
+                        var f=angular.fromJson(ret[i].data.results);
+                        //console.log(i+"Their Names="+angular.toJson(f));
+                        //console.log(i+"Their Names="+f.name);
+                        arrmyalias[i]=f.name;
+                        
 
-                   // console.log($scope.guidName1);
-
-                    $scope.ed2=newarr;
-                    $scope.newvts=newarrvts;
-
-                    var edges2 = [];
-                    $scope.ed2.forEach(function(e) {
-                        var sourceNode = $scope.newvts.filter(function(n) { return n.Id === e.source; })[0],
-                            targetNode = $scope.newvts.filter(function(n) { return n.Id === e.target; })[0];
-
-                        if((sourceNode!=undefined) && (targetNode!=undefined)){
-                            edges2.push({source: sourceNode, target: targetNode});
-                        }
-                    });
-
-                    var ed1 = [];
-                    edges2.forEach(function(e) {
-                        var sourceNode = $scope.newvts.filter(function(n) { return n.Id === e.source; })[0],
-                            targetNode = $scope.newvts.filter(function(n) { return n.Id === e.target; })[0];
-                        ed1.push({source: sourceNode, target: targetNode});
-                    });
-
-
-
-                    var vtsarray2 = $scope.guidName1;
-
-                    //console.log(getType($scope.guidName1));
-                    $scope.newvts.forEach(function(e) {
-                        angular.forEach(vtsarray2, function(item1){
-
-                           if(item1.id === e.Name){
-                               console.log(item1.Name);
-                           }
-                           console.log(vtsarray2);
-                       });
-
-                       // console.log($scope.guidName1);
-                        //vtsarray2.push({"Name": item.guid,"Id" :index,"hasChild":"True","type":item.typeName});
-
-                    });
-
-
-                    //Width and height
-                    var w = 700;
-                    var h = 500;
-                    var force = d3.layout.force()
-                        .nodes($scope.newvts)
-                        .links(edges2)
-                        .size([w, h])
-                        .linkDistance([400])
-                        .charge([-250])
-                        .start();
-
-                    var colors = d3.scale.category10();
-
-                    //Create SVG element
-                    var svg = d3.select("svg")
-                        .attr("width", w)
-                        .attr("height", h);
-
-                    var tip = d3.tip()
-                        .attr('class', 'd3-tip')
-                        .offset([-10, 0])
-                        .html(function(d) {
-                            return "<pre class='alert alert-success' style='max-width:400px;'>" + d.values + "</pre>";
-                        });
-                    //svg.call(tip);
-                    //Create edges as lines
-                    var edges = svg.selectAll("line")
-                        .data(edges2)
-                        .enter()
-                        .append("line")
-                        .style("stroke", "#23A410")
-                        .style("stroke-width", 3);
-
-                    var node = svg.selectAll(".node")
-                        .data($scope.newvts)
-                        .enter().append("g")
-                        .attr("class", "node")
-                        .call(force.drag);
-
-                    svg.append("svg:pattern").attr("id","processICO").attr("width",1).attr("height",1)
-                        .append("svg:image").attr("xlink:href","img/process.png").attr("x",-5.5).attr("y",-4).attr("width",42).attr("height",42);
-                    svg.append("svg:pattern").attr("id","textICO").attr("width",1).attr("height",1)
-                        .append("svg:image").attr("xlink:href","img/tableicon.png").attr("x",2).attr("y",2).attr("width",25).attr("height",25);
-
-// define arrow markers for graph links
-
-                    node.append("circle")
-                        .attr("r", function(d, i) {
-                            if(d.hasChild=="True"){
-                                return 15;
-                            }else{
-                                return 15;
-                            }
-                            return 10;
-                        })
-                        .attr("cursor","pointer")
-                        .style("fill", function(d, i) {
-                            if(d.type=="LoadProcess"){
-                                return "url('#processICO')";
-                            }else{
-                                return "url('#textICO')";
-                            }
-                            return colors(i);
-                        })
-                        .attr("class","circle");
-                    //.call(force.drag);
-
-                    //Add text
-                    node.append("text")
-                        .attr("x", 12)
-                        .attr("dy", ".35em")
-                        .text(function(d) { return d.Name;         });
-
-                    //Every time the simulation "ticks", this will be called
-                    force.on("tick", function() {
-
-                        edges.attr("x1", function(d) { return d.source.x; })
-                            .attr("y1", function(d) { return d.source.y; })
-                            .attr("x2", function(d) { return d.target.x; })
-                            .attr("y2", function(d) { return d.target.y; });
-
-
-
-
-
-                        //node.attr("cx", function(d) { return d.x; })
-                        //.attr("cy", function(d) { return d.y; });
-                        node
-                            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-                    })
-
-                    function mouseover(d) {
-                        d3.select(this).select("circle").transition()
-                            .duration(750)
-                            .attr("r", 16);
                     }
-
-                    function mouseout() {
-                        d3.select(this).select("circle").transition()
-                            .duration(750)
-                            .attr("r", 10);
-                    }
-
-
-                })
+                    loadjsonReal(arrmyalias);
+                });
+				
+				  })
                 .error(function (e) {
                     $scope.iserror1=true;
                     $scope.error1=e;
                 });
 
+				
+				
+				 function loadjsonReal(arrmyalias){
+                
+                var toparr=[];
+                var array1=[];
+                
+                var rootobj=new Object();
+                rootobj.name=arrmyalias[0];
+                rootobj.alias=arrmyalias[0];
+                rootobj.parent="null";
+                
+                toparr[0]=rootobj;
+                
+                for(i=1;i<arrmyalias.length;){
+                    
+				//start first object
+                    var childobj=new Object();
+                    childobj.alias=arrmyalias[i];
+                    childobj.name=arrmyalias[i];
+                    childobj.parent=arrmyalias[0];
+                
+                    i++;
+                    var childsub1obj=new Object();
+                    childsub1obj.name=arrmyalias[i];
+                    childsub1obj.alias=arrmyalias[i];
+                    childsub1obj.parent=childobj.name;
+
+                    i++;
+                    var childsub2obj=new Object();
+                    childsub2obj.name=arrmyalias[i];
+                    childsub2obj.alias=arrmyalias[i];
+                    childsub2obj.parent=childobj.name;
+                
+                    var arraychildren1=[];
+                    arraychildren1.push(childsub1obj);
+                    if(arrmyalias[i]){
+                        arraychildren1.push(childsub2obj);
+                    }
+
+                    childobj.children=arraychildren1;
+					//end first objects
+ 
+                    
+                    array1.push(childobj);
+                    //array1[1]=child1obj2;
+                    
+                }
+                rootobj.children=array1;
+                
+                
+                
+                
+                console.log("REAL DATA"+angular.toJson(toparr));
+                root = toparr[0];//treeData[0];
+  
+                //doMakeStaticJson();
+                update(root);
+
+
+            }
+			
+			var margin = {top: 20, right: 120, bottom: 20, left: 120},
+	width = 960 - margin.right - margin.left,
+	height = 500 - margin.top - margin.bottom;
+	
+var i = 0;
+
+    var mitharr=["/dashboard/test2/img/tableicon.png","/dashboard/test2/img/process.png","/dashboard/test2/img/tableicon.png","/dashboard/test2/img/tableicon.png"];
+    
+var tree = d3.layout.tree()
+	.size([height, width]);
+
+var diagonal = d3.svg.diagonal()
+	.projection(function(d) { return [d.y, d.x]; });
+
+var svg = d3.select("svg")
+	.attr("width", width + margin.right + margin.left)
+	.attr("height", height + margin.top + margin.bottom)
+  .append("g")
+	.attr("transform", 
+	      "translate(" + margin.left + "," + margin.top + ")");
+
+//root = treeData[0];
+//  
+//update(root);
+
+    
+    
+function update(source) {
+
+  // Compute the new tree layout.
+  var nodes = tree.nodes(root).reverse(),
+	  links = tree.links(nodes);
+
+  // Normalize for fixed-depth.
+  nodes.forEach(function(d) { d.y = d.depth * 180; });
+
+  // Declare the nodes…
+  var node = svg.selectAll("g.node")
+	  .data(nodes, function(d) { return d.id || (d.id = ++i); });
+//arrow
+ svg.append("svg:defs").append("svg:marker").attr("id", "arrow").attr("viewBox", "0 0 10 10").attr("refX", 16).attr("refY", 5).attr("markerUnits", "strokeWidth").attr("markerWidth", 4).attr("markerHeight", 8).attr("orient", "auto").append("svg:path").attr("d", "M 0 0 L 10 5 L 0 10 z");
+//arrow
+  // Enter the nodes.
+  var nodeEnter = node.enter().append("g")
+	  .attr("class", "node")
+	  .attr("transform", function(d) { 
+		  return "translate(" + d.y + "," + d.x + ")"; });
+
+  nodeEnter.append("image")
+      .attr("xlink:href", function(d) {
+                                            //return d.icon;
+                                            return mitharr[d.depth];
+                                      })
+      .attr("x", "-12px")
+      .attr("y", "-12px")
+      .attr("width", "24px")
+      .attr("height", "24px");
+
+
+
+  nodeEnter.append("text")
+	  .attr("x", function(d) {
+		  return d.children || d._children ?
+		  (30) * -1 : + 30 })
+	  .attr("dy", ".35em")
+	  .attr("text-anchor", function(d) {
+		  return d.children || d._children ? "end" : "start"; })
+	  .text(function(d) {
+                                return d.alias;
+                                //return d.name;
+                        })
+	  .style("fill-opacity", 1);
+
+  // Declare the links…
+  var link = svg.selectAll("path.link")
+	  .data(links, function(d) { return d.target.id; });
+//link.attr("marker-end", "url(#arrow)"); //also added attribute for arrow at end
+  // Enter the links.
+  link.enter().insert("path", "g")
+	  .attr("class", "link")
+	  .style("stroke", function(d) { return d.target.level; })
+	  .attr("d", diagonal);
+	  link.attr("marker-end", "url(#arrow)"); //also added attribute for arrow at end
+
+}
+
+
+
+
+              
 
         }
 
