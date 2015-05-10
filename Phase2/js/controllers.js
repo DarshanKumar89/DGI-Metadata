@@ -588,22 +588,24 @@ if(arrmyalias.length>1){
 //image intitializer
  var mitharr=["img/tableicon.png","img/process.png","img/tableicon.png","img/process.png","img/tableicon.png"];
 
-
+//getlinageoutput
 
                  var force = d3.layout.force()
                      .gravity(0)
                      .friction(0.7)
-                     .charge(-90)
-					 .linkDistance(120)
+                     .charge(-50)
+					 .linkDistance(130)
 					 .size([width, height])
                       .on("tick", tick);
 
                  var svg = d3.select("svg")
 //                 .attr("transform", "translate(" + (width/2) +
 //                          "," + (height/2) + ")")
+                         .attr("id", "playgraph")
+                                     //better to keep the viewBox dimensions with variables
 
                           .attr('transform-origin', '-419 -530')
-                          .attr("viewBox", "10 -300 1000 1000")
+                          .attr("viewBox", "10 -300 700 1000")
                             .attr("preserveAspectRatio", "xMidYMid meet");
 //                               .append("g")
 //                               .attr("transform", "translate(" + d.x + "," + d.y +") rotate(180) scale(-1, -1)");
@@ -653,7 +655,7 @@ if(arrmyalias.length>1){
 
 
 //arrow
- svg.append("svg:defs").append("svg:marker").attr("id", "arrow").attr("viewBox", "0 0 10 10").attr("refX", 36).attr("refY", 5).attr("markerUnits", "strokeWidth").attr("markerWidth", 8).attr("markerHeight", 8).attr("orient", "auto").append("svg:path").attr("d", "M 0 0 L 10 5 L 0 10 z");
+ svg.append("svg:defs").append("svg:marker").attr("id", "arrow").attr("viewBox", "0 0 10 10").attr("refX", 26).attr("refY", 5).attr("markerUnits", "strokeWidth").attr("markerWidth", 13).attr("markerHeight", 13).attr("orient", "auto").append("svg:path").attr("d", "M 0 0 L 10 5 L 0 10 z");
 //arrow
   var nodeEnter = node.enter().append("g")
       .attr("class", "nodeTrans")
@@ -671,8 +673,8 @@ if(arrmyalias.length>1){
 
   nodeEnter.append("text")
       .style("text-anchor", "middle")
-
-
+.attr('font-family', 'Roboto Slab')
+.style("font-size","20px")
       .attr("dy", "-1em")
 
        .attr("text-anchor", function(d) {
@@ -717,6 +719,8 @@ if(arrmyalias.length>1){
 
 //force.stop();
 function tick() {
+  node[0].x = width / 10;
+    node[0].y = height / 10;
   link.attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
@@ -724,6 +728,8 @@ function tick() {
 
 
     node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")  " });
+
+
 
 }
 
@@ -912,19 +918,30 @@ if(arrmyalias.length>1){
 					if(arrmyalias.length>2){
                     var arraychildren1=[];
                     arraychildren1.push(childsub1obj);
+					console.log(arraychildren1);
                     child1obj.children=arraychildren1;
 					}
                         //start
                         var childsub2obj=new Object();
                         childsub2obj.name=arrmyalias[3];
                         childsub2obj.alias=arrmyalias[3];
-							childsub2obj.query=tags[3];
-							childsub2obj.datatype=datatypes[3];
-                        childsub2obj.parent=arrmyalias[2];
+						childsub2obj.query=tags[3];
+						childsub2obj.datatype=datatypes[3];
+						if(datatypes[2]==datatypes[3]){	
+                        childsub2obj.parent=arrmyalias[1];
+						}else{
+						childsub2obj.parent=arrmyalias[2];
+						}
 						if(arrmyalias.length>3){
                         var arraychildren2=[];
                         arraychildren2.push(childsub2obj);
-                        childsub1obj.children=arraychildren2;
+						
+								if(datatypes[2]==datatypes[3]){	
+									child1obj.children.push(childsub2obj);						                        
+								}else{
+								childsub1obj.children=arraychildren2;
+								}
+								console.log(child1obj);
 						}
 
                             //start
@@ -983,19 +1000,22 @@ if(arrmyalias.length>1){
 
 
                  var force = d3.layout.force()
-                     .gravity(0)
-                     .friction(0.7)
-                     .charge(-90)
-					 .linkDistance(120)
+
+//                     .friction(0.7)
+                   .gravity(0.3)
+                   		.charge(-1000)
+					 .linkDistance(170)
 					 .size([width, height])
                       .on("tick", tick);
 
                  var svg = d3.select("svg1").append("svg")
 //                 .attr("transform", "translate(" + (width/2) +
 //                          "," + (height/2) + ")")
+                         .attr("id", "playgraph")
+                                     //better to keep the viewBox dimensions with variables
 
                           .attr('transform-origin', '-419 -530')
-                          .attr("viewBox", "10 -300 1000 1000")
+                          .attr("viewBox", "100 -200 700 1000")
                             .attr("preserveAspectRatio", "xMidYMid meet");
 //                               .append("g")
 //                               .attr("transform", "translate(" + d.x + "," + d.y +") rotate(180) scale(-1, -1)");
@@ -1049,7 +1069,7 @@ if(arrmyalias.length>1){
 
 
 //arrow
- svg.append("svg:defs").append("svg:marker").attr("id", "arrow1").attr("viewBox", "0 0 10 10").attr("refX", 60).attr("refY", 5).attr("markerUnits", "strokeWidth").attr("markerWidth", 8).attr("markerHeight", 8).attr("orient", "auto").append("svg:path").attr("d", "M 0 0 L 10 5 L 0 10 z");
+ svg.append("svg:defs").append("svg:marker").attr("id", "arrow1").attr("viewBox", "0 0 10 10").attr("refX", 30).attr("refY", 5).attr("markerUnits", "strokeWidth").attr("markerWidth", 10).attr("markerHeight", 10).attr("orient", "auto").append("svg:path").attr("d", "M 0 0 L 10 5 L 0 10 z");
 //arrow
   var nodeEnter = node.enter().append("g")
       .attr("class", "nodeTrans")
@@ -1067,7 +1087,7 @@ if(arrmyalias.length>1){
 
   nodeEnter.append("text")
       .style("text-anchor", "middle")
-
+.attr('font-family', 'Roboto Slab')
 
       .attr("dy", "-1em")
 
@@ -1113,6 +1133,9 @@ if(arrmyalias.length>1){
 
 //force.stop();
 function tick() {
+
+  node[0].x = width / 10;
+    node[0].y = height / 10;
   link.attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
@@ -1120,6 +1143,7 @@ function tick() {
 
 
     node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")  " });
+
 
 }
 
