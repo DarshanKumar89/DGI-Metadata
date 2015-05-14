@@ -37,7 +37,7 @@
                       <br/>
                          <p style="font-weight:1000;font-size:18px;color:#333;">  {{value }}</p>
                         
-                         <!--  <h4><b>  {{value}}</b></h4> -->
+
 
 
                      </div>
@@ -101,19 +101,7 @@
 					</td>
 
 					</tr>
-                        <!-- <tr>
 
-                                   <td>
-                                       <p class="sm-txt2">Tags:</p>
-                                   </td>
-                                   <td>
-                                       <p ng-repeat="(keytag, valtag) in details['$traits$']">
-                                       <a ng-click="updateVariable($event)" ui-sref="Search({ searchid: keytag })" style="color: #636364 !important;">
-                                           {{keytag}} </a></p>
-                                    </td>
-
-                        </tr>
- -->
 					</tbody>
 					
 					</table>
@@ -139,16 +127,7 @@
 
 
                     <table class="table table-bordered table-hover" style="margin-top: 20px">
-                      <!--  <thead>
-                        <tr>
-                            <th style="border:2px solid #C9CBCC !important;">Value</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="(key, value) in schema.columns">
-                        <td>{{value}}</td>
-                        </tr>
-                        </tbody>-->
+
 
 
                         <thead>
@@ -169,31 +148,7 @@
 
                                        <td> {{s.comment }}</td>
                              </tr>
-                       <!--  <tr ng-repeat="(key, value) in schema" ng-if="value">
-                         
-                            <td ng-if="isString(value)">
-                                {{value | date:'medium'}}</td>
 
-                            <td ng-if="isObject(value)">
-                                <div ng-repeat="(key1, value1) in value">
-                                    <p ng-if="key1==='id'">
-                                        <a ng-click="updateVariable($event)"  href="#/details/{{value1}}" style="color: #636364 !important;" ng-init="getGuidName(value1)">{{ gname.name }}</a>
-                                      </p>
-                                    
-                                     <p ng-if="!(key1==='id')" class="sm-txt2" >
-                                         <td><b>{{ key1 }} :  </b></td>
-
-
-                                      
-                                         <td>  {{ value1 | date:'medium'    }}</td>
-                                     </tr>
-                                     </p>
-
-                                   
-                                </div>
-                            </td>
-
-                        </tr> -->
                         </tbody>
 
                     </table>
@@ -208,11 +163,6 @@
                     <div class="col-xs-12">
                         <div class="row">
                             <div ng-if="errornodata"><h1>{{errornodata}}</h1></div>
-                            <!--<svg ng-attr-width="{{width}}"-->
-                                 <!--ng-attr-height="{{height}}">-->
-
-                            <!--</svg>-->
-
 
                             <svg
                                  width="700px" height="600px"  overflow="hidden" style="margin:auto;vertical-align: middle;" preserveAspectRatio="none">
@@ -220,10 +170,6 @@
                             </svg>
 
 
-            <!--<div id="mybounce"  style="text-align:center;">-->
-
-
-            <!--</div>-->
 
                             <div class="col-lg-12 img2" align="right"><img src="img/img2.png"></div>
                         </div>
@@ -239,7 +185,6 @@
                                ng-attr-height="{{height}}" width="700px" height="600px"  overflow="hidden" style="margin:auto;vertical-align: middle;" preserveAspectRatio="none">
 
                          </svg1>
-                            <!--<iframe src="partials/sample.html"style=" width:630px;height:500px;overflow-x: hidden;overflow: hidden; overflow-y='scroll';" frameborder="0" scrolling="no"></iframe>-->
 
 
 
@@ -251,7 +196,6 @@
         </tabset>
         <div>
             <a ui-sref="Search"  ng-click="goBack()" style="color: #636364 !important;   margin-left: 15px;">Back To Results</a>
-            <!--<a  ui-sref="Search" onClick="javascript:history.go(-1);" style="color: #636364 !important;   margin-left: 15px;">Back To Results</a>-->
-        </div>
+             </div>
 
     </div>
