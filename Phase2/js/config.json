@@ -36,17 +36,16 @@
   ],
   "LoadProcess": [
     { "$id$":["id"] },
-    "outputTable",
-    "inputTables",
+{ "inputTables":["id"] },
     "name",
     "queryText",
     "startTime",
-    "queryPlan",
+	"endTime",
     { "$traits$":[""]}
   ],
   "View": [
     { "$id$":["id"] },
-    "inputTables",
+{ "inputTables":["id"] },
     "name",
     { "$traits$":[""]}
   ]

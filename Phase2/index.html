@@ -42,9 +42,7 @@
         <link href="css/style.css" rel="stylesheet">
         <link type="text/css" rel="stylesheet" href="css/pagination.css" />
 
-        <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-        <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-        <script src="js/ie-emulation-modes-warning.js"></script>
+       
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -52,12 +50,12 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="lib/Angular/angular.js" type="text/javascript" ></script>
+        <script src="lib/angular.js" type="text/javascript" ></script>
         <script src="lib/angular-ui-router.js" type="text/javascript" ></script>
         <script src="lib/angular-ui-router.min.js" type="text/javascript" ></script>
         <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.6.0.js" type="text/javascript"></script>
         <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
-        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+        <script src="lib/d3.tip.v0.6.3.js"></script>
         <script src="js/app.js" type="text/javascript" ></script>
         <script src="js/controllers.js" type="text/javascript" ></script>
 
@@ -66,15 +64,30 @@
                 font: 15px sans-serif;
                 opacity: 1.5;
                 stroke-width: 0.5px;
+
+            }
+            .nodeTrans{
+           position: relative;
+            float:left;
+            left:20px;
+
             }
             .node a{
                 text-decoration:none;
+            pointer-events: none;
+            text-anchor: middle;
             }
             .link {
                 stroke: #23A410;
                 stroke-opacity: 1.6;
-            }
 
+            }
+            svg { margin:20px; }
+            #mybounce  {
+            position:fixed; top:0; bottom:0; left:0; right:0
+
+
+            }
             #suit{
                 stroke: #23A410;
                 background: #23A410;
@@ -101,6 +114,7 @@
             path.link.hidden {
                 stroke-width: 0;
             }
+
 
             .navbar-bottom{
                 background-color:#fafafa;
@@ -166,7 +180,6 @@
 <div class="col-lg-2"></div>
 
 </div>
-    <!--<div class="col-lg-12" ng-controller="footerController" style="margin-top: 50px;"><pre><h4>API Version - {{apiVersion}}</h4></pre></div>-->
 
     </body>
 

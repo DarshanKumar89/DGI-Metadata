@@ -38,6 +38,15 @@
                                     </span>
 
                                 </span>
+								
+								  <span ng-if="value1.inputTables">
+                                    <span  class="resulttxt">
+                                    <b> inputTables : </b> <span ng-repeat="(inkey, invalue) in value.inputTables"> <span ng-controller="GuidController"> <span ng-init="getGuidName(invalue.id)"> <span ng-repeat="x in gnew track by $index">{{x}}</span>, </span>  </span>  </span>
+
+                                    </span>
+
+                                </span>
+								
                                 <div ng-if="value1.$id$">
 
                                         <div  class="col-lg-12" style="margin-left:-40px;">
